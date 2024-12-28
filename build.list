@@ -1,0 +1,19 @@
+// 1) Design-level files
+design.sv
+
+// 2) Interface and supporting files
+interface.sv
+transaction.sv
+generator.sv
+driver.sv
+monitor_in.sv
+monitor_out.sv
+scoreboard.sv
+environment.sv
+
+// 3) Test programs (one or more)
+test.sv
+//direct_test.sv
+
+// 4) Top-level testbench
+testbench.sv
