@@ -104,7 +104,6 @@ This **ALU With Memory** project demonstrates a simple SystemVerilog design that
 ## Directory Structure
 ```
 ├── design.sv
-├── memory.sv
 ├── interface.sv
 ├── transaction.sv
 ├── generator.sv
