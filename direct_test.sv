@@ -17,8 +17,6 @@
 * - Address 3 (EXECUTE_REG): Execute bit [0], bits [7:1] reserved
 *******************************************************************************/
 
-`include "environment.sv"
-
 program direct_test(mem_if vif);
 
   initial begin
