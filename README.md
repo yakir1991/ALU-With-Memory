@@ -55,7 +55,7 @@ This **ALU With Memory** project demonstrates a simple SystemVerilog design that
 ---
 
 ## Design Description
-- **`memory.sv`**: Implements a 4x8-bit memory and an ALU in the same module.  
+- **`design.sv`** (module `memory`): Implements a 4x8-bit memory and an ALU in the same module.
 - On each read/write, address/control signals select the desired register.  
 - When `EXECUTE=1`, the ALU computes according to `OPERATION_REG` and updates `res_out`. The
   execute bit is automatically cleared after the operation to avoid retriggering.
@@ -118,7 +118,7 @@ This **ALU With Memory** project demonstrates a simple SystemVerilog design that
 ├── build.list
 └── README.md
 ```
-- **`design.sv`, `memory.sv`**: DUT logic.  
+- **`design.sv`**: DUT logic.
 - **`interface.sv`**: Declares signals, assertions.  
 - **`transaction.sv`, `generator.sv`, `driver.sv`**: Transaction-level stimulus generation and driving.  
 - **`monitor_in.sv`, `monitor_out.sv`, `scoreboard.sv`**: Observers and result-checking.  
