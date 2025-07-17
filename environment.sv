@@ -24,6 +24,7 @@ class environment;
   int transaction_count;    // Number of transactions to generate
   int transaction_timeout;  // Timeout value for each transaction
   event test_done;          // Event to signal test completion
+  bit  test_complete;       // Flag raised when too many timeouts occur
 
   // Constructor
   function new(virtual mem_if vif);
@@ -65,31 +66,47 @@ class environment;
     $display("[Environment] Pre-test initialization completed at %0t", $time);
   endtask
 
-  // Task to monitor test completion
+  // Task to monitor generator/scoreboard completion with a timeout mechanism.
+  // The timeout branch waits in a loop, incrementing `timeout_count` each time
+  // `transaction_timeout` cycles pass without either completion event.  If the
+  // count reaches `max_timeouts`, the test is flagged as complete due to
+  // excessive timeouts.
   task monitor_completion();
     int timeout_count = 0;
+    int max_timeouts  = 5;   // Maximum consecutive timeouts allowed
+    bit done = 0;
     fork
       begin
         // Wait for generator to complete
         wait(gen.repeat_count == drv.num_transactions);
         $display("[Environment] Generator completed at %0t", $time);
+        done = 1;
       end
       begin
         // Wait for scoreboard to complete
         @(scb.test_done);
         $display("[Environment] Scoreboard completed at %0t", $time);
+        done = 1;
       end
       begin
-        // Timeout monitoring
-        repeat(transaction_timeout) @(posedge vif.clk);
-        timeout_count++;
-        if (timeout_count >= 5) begin
-          $display("[Environment] Test timeout after %0d attempts at %0t",
-                   timeout_count, $time);
+        // Timeout monitoring loop
+        // Keep waiting until either completion occurs or too many timeouts
+        while (!done && timeout_count < max_timeouts) begin
+          repeat(transaction_timeout) @(posedge vif.clk);
+          if (!done) begin
+            timeout_count++;
+            $display("[Environment] Timeout %0d at %0t", timeout_count, $time);
+          end
         end
       end
     join_any
     disable fork;
+
+    // Assert completion when the maximum number of timeouts was hit
+    if (timeout_count >= max_timeouts && !done) begin
+      test_complete = 1;
+      $display("[Environment] Test timeout after %0d attempts at %0t", timeout_count, $time);
+    end
   endtask
 
   // Task for post-test cleanup
