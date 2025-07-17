@@ -9,7 +9,7 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
 
   // Memory array definition: DATA_WIDTH-bit data width, ADDR_WIDTH locations
   reg [DATA_WIDTH-1:0] mem [0:(1<<ADDR_WIDTH)-1];
-  reg [DATA_WIDTH-1:0] rd_data_next;  // Register to hold the next read data value
+  // Registered read data is held directly in vif.rd_data
   reg [15:0] res_out_comb; // Combinational result of ALU operations
 
   // Initialize memory locations to 'hFF on reset
@@ -19,29 +19,24 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
       mem[i] = {DATA_WIDTH{1'b1}};  // Reset all memory locations to FF
       $display("[DUT] Memory[%0d] initialized to: %h", i, mem[i]);
     end
-    rd_data_next <= {DATA_WIDTH{1'b0}}; // Reset the next read data value
   end
 
   // Memory read/write operations and rd_data update
-  // rd_data is updated one cycle after a read using rd_data_next
+  // This block is the sole driver of vif.rd_data
   always @(posedge vif.clk) begin
     if (vif.rst) begin
-      vif.rd_data  <= {DATA_WIDTH{1'b0}};
-      rd_data_next <= {DATA_WIDTH{1'b0}};
+      vif.rd_data <= {DATA_WIDTH{1'b0}};
     end else begin
       if (vif.enable) begin
         if (vif.rd_wr) begin // Read operation
-          rd_data_next <= mem[vif.addr]; // Store the next read data
-          $display("[DUT] Read from Address %0d: Data = %h", vif.addr, rd_data_next);
+          vif.rd_data <= mem[vif.addr];
+          $display("[DUT] Read from Address %0d: Data = %h", vif.addr, mem[vif.addr]);
         end else begin // Write operation
           mem[vif.addr] <= vif.wr_data; // Write data to memory
           $display("[DUT] Write to Address %0d: Data = %h", vif.addr, vif.wr_data);
         end
       end
-
-      if (vif.rd_wr) begin
-        vif.rd_data <= rd_data_next; // One cycle delayed read data
-      end
+      // When not performing a read, rd_data holds its previous value
     end
   end
 
