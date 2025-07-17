@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// Memory + ALU module
+// This module acts as a simple 4x8 memory map with an embedded ALU.  The ALU
+// is controlled through dedicated registers within the memory map.
+// -----------------------------------------------------------------------------
 module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
   (mem_if.DUT vif);
 

@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Input monitor
+// Captures transactions going into the DUT for checking and coverage
+// -----------------------------------------------------------------------------
 class monitor_in;
   
   // Virtual interface handle

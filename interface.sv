@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Bus interface connecting the testbench and DUT
+// Provides clocking blocks, modports and protocol assertions
+// -----------------------------------------------------------------------------
 interface mem_if(input logic clk);
   
   // Interface signals
