@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Driver class
 // Receives transactions from the generator and drives them to the DUT

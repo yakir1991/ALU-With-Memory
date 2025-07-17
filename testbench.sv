@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Top level testbench
 // Generates the clock, instantiates the interface, DUT and test program

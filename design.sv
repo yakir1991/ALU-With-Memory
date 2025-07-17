@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Memory + ALU module
 // This module acts as a simple 4x8 memory map with an embedded ALU.  The ALU

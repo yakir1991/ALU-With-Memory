@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Randomized test program
 // Creates the environment and kicks off the run

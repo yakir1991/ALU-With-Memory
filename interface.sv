@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Bus interface connecting the testbench and DUT
 // Provides clocking blocks, modports and protocol assertions

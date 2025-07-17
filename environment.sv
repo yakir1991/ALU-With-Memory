@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Environment class
 // Instantiates all testbench components and coordinates the run
