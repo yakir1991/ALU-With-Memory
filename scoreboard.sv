@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Scoreboard class
+// Checks correctness of DUT behaviour and collects coverage
+// -----------------------------------------------------------------------------
 class scoreboard;
 
   // =========================================================================
@@ -23,8 +27,6 @@ class scoreboard;
   bit       cov_rd_wr;
   bit [7:0] cov_wr_data;
 
-  // Variable to keep track of the read/write operations
-  bit cp_rd_wr;
 
   // =========================================================================
   // Covergroup (Manual Sampling)

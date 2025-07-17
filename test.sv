@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Randomized test program
+// Creates the environment and kicks off the run
+// -----------------------------------------------------------------------------
 program test(mem_if vif);
 
   // Declare environment instance

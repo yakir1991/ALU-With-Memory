@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Output monitor
+// Observes DUT outputs such as read data and ALU results
+// -----------------------------------------------------------------------------
 class monitor_out;
   
   // Virtual interface handle

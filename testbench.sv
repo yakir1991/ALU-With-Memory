@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Top level testbench
+// Generates the clock, instantiates the interface, DUT and test program
+// -----------------------------------------------------------------------------
 // Author: Yakir Aqua
 
 module testbench_top;

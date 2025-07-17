@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Generator class
+// Produces randomized transactions and forwards them to the driver
+// -----------------------------------------------------------------------------
 class generator;
   // Declare a transaction object
   rand transaction trans;

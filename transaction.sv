@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Transaction class
+// Represents a single bus operation with randomizable fields
+// -----------------------------------------------------------------------------
 class transaction;
 
   // Declare transaction fields

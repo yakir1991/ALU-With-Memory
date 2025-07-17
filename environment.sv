@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Environment class
+// Instantiates all testbench components and coordinates the run
+// -----------------------------------------------------------------------------
 class environment;
 
   // Virtual interface
@@ -18,11 +22,8 @@ class environment;
   // Configuration parameters
   int transaction_count;    // Number of transactions to generate
   int transaction_timeout;  // Timeout value for each transaction
-  bit test_complete;       // Flag for test completion
-  event test_done;         // Event to signal test completion
-
-  // Variable to keep track of the number of transactions
-  int transaction_count;
+  bit test_complete;        // Flag for test completion
+  event test_done;          // Event to signal test completion
 
   // Constructor
   function new(virtual mem_if vif);

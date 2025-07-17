@@ -1,3 +1,7 @@
+// -----------------------------------------------------------------------------
+// Driver class
+// Receives transactions from the generator and drives them to the DUT
+// -----------------------------------------------------------------------------
 class driver;
   // Count the number of transactions driven
   int num_transactions;
