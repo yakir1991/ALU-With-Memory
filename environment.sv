@@ -22,7 +22,6 @@ class environment;
   // Configuration parameters
   int transaction_count;    // Number of transactions to generate
   int transaction_timeout;  // Timeout value for each transaction
-  bit test_complete;        // Flag for test completion
   event test_done;          // Event to signal test completion
 
   // Constructor
@@ -45,7 +44,6 @@ class environment;
     // Set default values
     transaction_count = 100;  // Default number of transactions
     transaction_timeout = 5000;  // Default timeout in ns
-    test_complete = 0;
   endfunction
 
   // Task for pre-test initialization
@@ -85,9 +83,8 @@ class environment;
         repeat(transaction_timeout) @(posedge vif.clk);
         timeout_count++;
         if (timeout_count >= 5) begin
-          $display("[Environment] Test timeout after %0d attempts at %0t", 
+          $display("[Environment] Test timeout after %0d attempts at %0t",
                    timeout_count, $time);
-          test_complete = 1;
         end
       end
     join_any
@@ -156,7 +153,6 @@ class environment;
           begin
             repeat(transaction_timeout * 2) @(posedge vif.clk);
             $display("[Environment] Global timeout reached at %0t", $time);
-            test_complete = 1;
           end
         join_any
         disable fork;
