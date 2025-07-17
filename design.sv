@@ -21,29 +21,26 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
     rd_data_next <= {DATA_WIDTH{1'b0}}; // Reset the next read data value
   end
 
-  // Memory read and write operations with improved timing
+  // Memory read/write operations and rd_data update
+  // rd_data is updated one cycle after a read using rd_data_next
   always @(posedge vif.clk) begin
     if (vif.rst) begin
-      vif.rd_data <= {DATA_WIDTH{1'b0}};
-    end
-    else if (vif.enable) begin
-      if (vif.rd_wr) begin // Read operation
-        rd_data_next <= mem[vif.addr]; // Store the next read data
-        $display("[DUT] Read from Address %0d: Data = %h", vif.addr, rd_data_next);
-      end else begin // Write operation
-        mem[vif.addr] <= vif.wr_data; // Write data to memory
-        $display("[DUT] Write to Address %0d: Data = %h", vif.addr, vif.wr_data);
+      vif.rd_data  <= {DATA_WIDTH{1'b0}};
+      rd_data_next <= {DATA_WIDTH{1'b0}};
+    end else begin
+      if (vif.enable) begin
+        if (vif.rd_wr) begin // Read operation
+          rd_data_next <= mem[vif.addr]; // Store the next read data
+          $display("[DUT] Read from Address %0d: Data = %h", vif.addr, rd_data_next);
+        end else begin // Write operation
+          mem[vif.addr] <= vif.wr_data; // Write data to memory
+          $display("[DUT] Write to Address %0d: Data = %h", vif.addr, vif.wr_data);
+        end
       end
-    end
-  end
 
-  // Synchronous rd_data output with one cycle delay
-  always @(posedge vif.clk) begin
-    if (vif.rst) begin
-      vif.rd_data <= {DATA_WIDTH{1'b0}};
-    end
-    else if (vif.rd_wr) begin
-      vif.rd_data <= rd_data_next;
+      if (vif.rd_wr) begin
+        vif.rd_data <= rd_data_next; // One cycle delayed read data
+      end
     end
   end
 
