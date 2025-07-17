@@ -2,7 +2,9 @@
 // -----------------------------------------------------------------------------
 // Memory + ALU module
 // This module acts as a simple 4x8 memory map with an embedded ALU.  The ALU
-// is controlled through dedicated registers within the memory map.
+// is controlled through dedicated registers within the memory map.  When the
+// EXECUTE bit (mem[3][0]) is asserted, the ALU performs the selected operation
+// and then this bit is automatically cleared.
 // -----------------------------------------------------------------------------
 module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
   (mem_if.DUT vif);
@@ -35,6 +37,12 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
           mem[vif.addr] <= vif.wr_data; // Write data to memory
           $display("[DUT] Write to Address %0d: Data = %h", vif.addr, vif.wr_data);
         end
+      end
+      // Self-clear the EXECUTE_REG after an ALU operation unless it is being
+      // explicitly written this cycle.  This prevents repeated executions on
+      // future accesses.
+      if (mem[3][0] && !(vif.enable && !vif.rd_wr && vif.addr == 2'b11)) begin
+        mem[3][0] <= 1'b0;
       end
       // When not performing a read, rd_data holds its previous value
     end
