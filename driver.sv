@@ -27,7 +27,8 @@ class driver;
     $display("[Driver] Reset Started"); // Display a message indicating reset start
     vif.rst <= 1; // Assert the reset signal
     vif.drv_cb.enable <= 0; // Disable the driver callback
-    vif.drv_cb.rd_wr <= 0; // rd_wr <= 0 selects a write operation
+    // Set bus direction: 0 = write, 1 = read
+    vif.drv_cb.rd_wr <= 0; // Hold write mode during reset
     vif.drv_cb.addr <= '0; // Clear the address
     vif.drv_cb.wr_data <= '0; // Clear the write data
     repeat(5) @(posedge vif.clk); // Hold reset for 5 clock cycles
