@@ -125,6 +125,7 @@ class environment;
     
     -> test_done;  // Signal test completion
     $display("[Environment] Post-test cleanup completed at %0t", $time);
+    $finish;  // End the simulation once cleanup is done
   endtask
 
   // Task to start all components
