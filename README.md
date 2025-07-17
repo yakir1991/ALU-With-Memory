@@ -38,7 +38,7 @@ This **ALU With Memory** project demonstrates a simple SystemVerilog design that
    - **0** => A_REG (8-bit operand A)  
    - **1** => B_REG (8-bit operand B)  
    - **2** => OPERATION_REG (bits [2:0] select ALU operation; [7:3] reserved)  
-   - **3** => EXECUTE_REG (bit [0] triggers ALU; [7:1] reserved)
+  - **3** => EXECUTE_REG (bit [0] triggers ALU and is self-clearing; [7:1] reserved)
 
 3. **Reset Behavior**:
    - Memory initialized to `0xFF` on reset  
@@ -57,7 +57,8 @@ This **ALU With Memory** project demonstrates a simple SystemVerilog design that
 ## Design Description
 - **`memory.sv`**: Implements a 4x8-bit memory and an ALU in the same module.  
 - On each read/write, address/control signals select the desired register.  
-- When `EXECUTE=1`, the ALU computes according to `OPERATION_REG` and updates `res_out`.
+- When `EXECUTE=1`, the ALU computes according to `OPERATION_REG` and updates `res_out`. The
+  execute bit is automatically cleared after the operation to avoid retriggering.
 
 ---
 

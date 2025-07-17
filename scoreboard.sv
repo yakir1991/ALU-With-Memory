@@ -9,7 +9,9 @@ class scoreboard;
   // Class variables
   // =========================================================================
   int num_passed, num_failed, num_transactions;
-  bit [7:0] mem_expected [0:3];    // Expected memory state
+  // Expected memory state.  Note that EXECUTE_REG bit[0] is modelled as
+  // self-clearing after an ALU operation to mirror the DUT behaviour.
+  bit [7:0] mem_expected [0:3];
   bit [15:0] alu_result_expected;  // Expected ALU result
   
   // Configuration parameters
@@ -205,7 +207,9 @@ class scoreboard;
               handle_write(in_trans);
               check_reserved_bits(in_trans);
               
-              // If EXECUTE_REG bit[0] is set => ALU operation
+              // If EXECUTE_REG bit[0] is set => ALU operation.  The design now
+              // clears this bit automatically after execution, so mirror that
+              // behaviour in the expected memory state.
               if (mem_expected[3][0]) begin
                 got_transaction = 0;
                 fork
@@ -218,10 +222,12 @@ class scoreboard;
                   end
                 join_any
                 disable fork;
-                
+
                 if (got_transaction) begin
                   check_alu_result(out_trans, mem_expected[2][2:0]);
                 end
+                // Clear execute bit once result has been checked
+                mem_expected[3][0] = 0;
               end
 
             end else begin // Read
