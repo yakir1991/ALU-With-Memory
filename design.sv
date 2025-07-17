@@ -13,6 +13,7 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
   reg [DATA_WIDTH-1:0] mem [0:(1<<ADDR_WIDTH)-1];
   // Registered read data is held directly in vif.rd_data
   reg [15:0] res_out_comb; // Combinational result of ALU operations
+  reg [15:0] res_out_reg;  // Registered ALU result
 
   // Initialize memory locations to 'hFF on reset
   integer i;
@@ -23,11 +24,12 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
     end
   end
 
-  // Memory read/write operations and rd_data update
-  // This block is the sole driver of vif.rd_data
+  // Combined sequential block handling reset, memory access and ALU result
+  // This block is the sole driver of vif.rd_data and res_out_reg
   always @(posedge vif.clk) begin
     if (vif.rst) begin
-      vif.rd_data <= {DATA_WIDTH{1'b0}};
+      vif.rd_data  <= {DATA_WIDTH{1'b0}};
+      res_out_reg <= 16'b0;
     end else begin
       if (vif.enable) begin
         if (vif.rd_wr) begin // Read operation
@@ -38,18 +40,20 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
           $display("[DUT] Write to Address %0d: Data = %h", vif.addr, vif.wr_data);
         end
       end
+
       // Self-clear the EXECUTE_REG after an ALU operation unless it is being
-      // explicitly written this cycle.  This prevents repeated executions on
+      // explicitly written this cycle. This prevents repeated executions on
       // future accesses.
       if (mem[3][0] && !(vif.enable && !vif.rd_wr && vif.addr == 2'b11)) begin
         mem[3][0] <= 1'b0;
       end
-      // When not performing a read, rd_data holds its previous value
+
+      // Register ALU output
+      res_out_reg <= res_out_comb;
     end
   end
 
   // Combinational ALU operations with registered output
-  reg [15:0] res_out_reg;
   
   always @* begin
     res_out_comb = 16'b0; // Default value
@@ -71,16 +75,6 @@ module memory #(parameter ADDR_WIDTH = 2, DATA_WIDTH = 8)
     end
     else begin
       res_out_comb = res_out_reg;  // Keep previous result when not executing
-    end
-  end
-
-  // Register ALU output
-  always @(posedge vif.clk) begin
-    if (vif.rst) begin
-      res_out_reg <= 16'b0;
-    end
-    else begin
-      res_out_reg <= res_out_comb;
     end
   end
 
