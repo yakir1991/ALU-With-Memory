@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Scoreboard class
 // Checks correctness of DUT behaviour and collects coverage

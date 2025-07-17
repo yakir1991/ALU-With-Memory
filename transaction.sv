@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Transaction class
 // Represents a single bus operation with randomizable fields

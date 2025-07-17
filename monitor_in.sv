@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Input monitor
 // Captures transactions going into the DUT for checking and coverage

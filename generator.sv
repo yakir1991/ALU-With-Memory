@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Generator class
 // Produces randomized transactions and forwards them to the driver

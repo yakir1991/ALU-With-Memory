@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // -----------------------------------------------------------------------------
 // Output monitor
 // Observes DUT outputs such as read data and ALU results
